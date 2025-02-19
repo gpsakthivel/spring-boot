@@ -1,17 +1,18 @@
 
-
-
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="dev" class="com.telusko.Dev">
+<!--        <property name="age" value="12"></property>-->
+<!--        <constructor-arg value="14"></constructor-arg>-->
 
+        <property name="laptop" ref="lap1"></property>
+        <constructor-arg ref="lap1"></constructor-arg>
     </bean>
 
-    <bean id="laptop" class="com.telusko.Laptop">
-
+    <bean id="lap1" class="com.telusko.Laptop">
     </bean>
 </beans>
 
