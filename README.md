@@ -8,7 +8,6 @@
 - jvl-code
   - crash-course
   - Reference: https://www.youtube.com/watch?v=bCPJN-_RKN0
-  - e-commerce-app
-  - Reference: https://www.youtube.com/watch?v=Ug-brYWK6cI
+  - [jvlcart - ecommerce api](https://www.youtube.com/watch?v=Ug-brYWK6cI)
   - full-stack-project
   - Reference: https://www.youtube.com/watch?v=WeuJdpvkMQo
