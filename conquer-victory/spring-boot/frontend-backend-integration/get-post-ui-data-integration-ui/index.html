@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Conquer Victory</h1>
+    <button onclick="getStudents()">Show Students</button>
+    <a href="register.html">Register!!</a>
+
+    <script>
+        function getStudents() {
+            fetch("http://localhost:8080/students") // API ENDPOINT
+                .then((response) => response.json()) // JSON CONVERSION
+                .then((data) => console.log(data)); // LOGGING THE DATA
+        }
+    </script>
+</body>
+</html>
