@@ -7,12 +7,10 @@ import com.example.rest_api.todo.repositories.TodoRepo;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -22,8 +20,16 @@ public class TodoController {
     private TodoRepo todoRepo;
 
     @GetMapping("/todos")
-    public List<Todo> root() {
-        return this.todoRepo.findAll();
+    public List<Todo> todos(@RequestParam Optional<Boolean> completed) {
+        return completed.map(c -> this.todoRepo.findAllByCompleted(c))
+                .orElseGet(() -> this.todoRepo.findAll());
+    }
+
+    @GetMapping("/todos/{id}")
+    public ResponseEntity<Todo> getTodos(@PathVariable Long id) {
+        return this.todoRepo.findById(id)
+                .map(todo -> ResponseEntity.ok().body(todo))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/todos")
@@ -31,24 +37,47 @@ public class TodoController {
         this.todoRepo.save(new Todo(null, todoDto.getTask(), false));
         return ResponseEntity.ok().build();
     }
-//
-//    @GetMapping("/todos")
-//    public List<Todo> root() {
-//        return this.todoRepo.findAll();
-//    }
-//
-//    @GetMapping("/todos")
-//    public List<Todo> root() {
-//        return this.todoRepo.findAll();
-//    }
-//
-//    @GetMapping("/todos")
-//    public List<Todo> root() {
-//        return this.todoRepo.findAll();
-//    }
-//
-//    @GetMapping("/todos")
-//    public List<Todo> root() {
-//        return this.todoRepo.findAll();
-//    }
+
+    @PutMapping("/todos/{id}")
+    public ResponseEntity<Object> updateTodo(@PathVariable Long id, @Valid @RequestBody TodoDto todoDto) {
+        return this.todoRepo.findById(id)
+                .map(todo -> {
+                    todo.setTask(todoDto.getTask());
+                    this.todoRepo.save(todo);
+                    return ResponseEntity.ok().build();
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/todos/{id}/mark_completed")
+    public ResponseEntity<Object> markComplete(@PathVariable Long id) {
+        return this.todoRepo.findById(id)
+                .map(todo -> {
+                    todo.setCompleted(true);
+                    this.todoRepo.save(todo);
+                    return ResponseEntity.ok().build();
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/todos/{id}/mark_incompleted")
+    public ResponseEntity<Object> markIncomplete(@PathVariable Long id) {
+        return this.todoRepo.findById(id)
+                .map(todo -> {
+                    todo.setCompleted(false);
+                    this.todoRepo.save(todo);
+                    return ResponseEntity.ok().build();
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/todos/{id}")
+    public ResponseEntity<Object> addTodo(@PathVariable Long id, @Valid @RequestBody TodoDto todoDto) {
+        return this.todoRepo.findById(id)
+                .map(todo -> {
+                    this.todoRepo.delete(todo);
+                    return ResponseEntity.ok().build();
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
 }
